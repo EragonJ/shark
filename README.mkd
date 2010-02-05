@@ -20,7 +20,7 @@ Here comes the demo of installation flow:
 
 		$plurk = new shark();
 		$plurk->login($api_key,$username,$password);
-		$plurk->set_rules('token'); 
+		$plurk->set_rules('smile|laugh'); 
 		$plurk->set_responses('I detect "token" and leave the response by your_bot');
 		$plurk->set_save(true);
 		$plurk->run();
@@ -45,9 +45,14 @@ b.Login
 
 c.Rules
 	You can choose which word to match as your token
-	$token: Your specific matching word
+	$token: Your specific matching word (or **regular expression** here)
+					Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
 
 		$this->set_rules($token);
+
+	example:
+		
+		$this->set_rules("測試|[Tt]est");
 
 d.Responses
 	You can decide what the responses will be.
@@ -56,7 +61,8 @@ d.Responses
 		$this->set_responses($responses);
 
 e.Save
-	You can choose to save the shark's log or not.
+	You can choose to save the shark's log or not. BTW, two records are saved as "sharlog" for each plurk. 
+	One is "posted time" and the other is "permanent link". And all of them are wrapped in JSON format at the same time.
 	$choice: true or false. The default is true
 
 		$this->set_save($choice);
