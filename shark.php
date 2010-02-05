@@ -9,6 +9,7 @@
 		private $_plurks;
 		private $_save;
 		private $_filelist;
+		private $_filelistnum;
 		private $_randnum;
 
 		/**
@@ -46,8 +47,9 @@
 			//To test whether it is a file or not (only support json)
 			if(file_exists($input))
 			{
-				$content         = file_get_contents($input);
-				$this->_filelist = explode("\n",$content);
+				$content            = file_get_contents($input);
+				$this->_filelist    = explode("\n",$content);
+				$this->_filelistnum = count($this->_filelist)-1-1;//one space
 				$this->rand_response();
 			}
 			else
@@ -87,8 +89,7 @@
 
 		private function rand_response()
 		{
-			$count           = strlen($this->_filelist)-1;
-			$this->_randnum  = rand(0,$count-1);
+			$this->_randnum  = rand(0,$this->_filelistnum);
 			$output          = '';
 
 			//It is nested array
@@ -148,11 +149,12 @@
 								$this->rand_response();
 
 								//Put here to reduce the cost for adding all as friends
-								$this->add_all_as_friends();
+								//$this->add_all_as_friends();
 							}
 						}
 					}
 				}
+				$this->add_all_as_friends();
 			}while($this->_infinite);
 		}
 	}
