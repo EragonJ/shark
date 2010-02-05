@@ -148,7 +148,7 @@
 								$this->rand_response();
 
 								//Put here to reduce the cost for adding all as friends
-								$this->add_all_as_friends()
+								$this->add_all_as_friends();
 							}
 						}
 					}
