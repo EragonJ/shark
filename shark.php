@@ -143,8 +143,12 @@
 									//Save the permalink at the sharklog
 									$this->save($this->get_permalink($p_value->plurk_id));
 								}
+								//remove the picked up 
 								array_pop($this->_responses);
 								$this->rand_response();
+
+								//Put here to reduce the cost for adding all as friends
+								$this->add_all_as_friends()
 							}
 						}
 					}
