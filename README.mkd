@@ -45,9 +45,8 @@ b.Login
 
 c.Rules
 	You can choose which word to match as your token
-	$token: Your specific matching word (or **regular expression** here)
-
 	Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
+	$token: Your specific matching word (or "regular expression" here)
 
 		$this->set_rules($token);
 
