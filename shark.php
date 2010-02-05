@@ -8,6 +8,8 @@
 		private $_constants = array();
 		private $_plurks;
 		private $_save;
+		private $_filelist;
+		private $_randnum;
 
 		/**
 		* userinfo
@@ -41,8 +43,18 @@
 
 		public function set_responses($input)
 		{
-			is_array($input) ? $input
-											 : array_push($this->_responses, $input);
+			//To test whether it is a file or not (only support json)
+			if(file_exists($input))
+			{
+				$content         = file_get_contents($input);
+				$this->_filelist = explode("\n",$content);
+				$this->rand_response();
+			}
+			else
+			{
+				is_array($input) ? $input
+												 : array_push($this->_responses, $input);
+			}
 		}
 
 		public function set_rules($token,$qualifier='thinks')
@@ -68,9 +80,24 @@
 					touch($log);
 				}
 				$source = file_get_contents($log);
-				$source .= date("Y-m-d H:i:s - ").$message."\n";
+				$source .= json_encode(array(date("Y-m-d H:i:s")=>$message))."\n";
 				file_put_contents($log,$source);
 			}
+		}
+
+		private function rand_response()
+		{
+			$count           = strlen($this->_filelist)-1;
+			$this->_randnum  = rand(0,$count-1);
+			$output          = '';
+
+			//It is nested array
+			$result = json_decode($this->_filelist[$this->_randnum],true);
+			foreach($result as $key => $val)
+			{
+				$output .= $key.$val;
+			}
+			array_push($this->_responses,$output);
 		}
 
 		public function run()
@@ -116,6 +143,8 @@
 									//Save the permalink at the sharklog
 									$this->save($this->get_permalink($p_value->plurk_id));
 								}
+								array_pop($this->_responses);
+								$this->rand_response();
 							}
 						}
 					}
