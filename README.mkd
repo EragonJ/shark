@@ -22,6 +22,7 @@ Here comes the demo of installation flow:
 		$plurk->login($api_key,$username,$password);
 		$plurk->set_rules('token'); 
 		$plurk->set_responses('I detect "token" and leave the response by your_bot');
+		$plurk->set_save(true);
 		$plurk->run();
 
 Usage
@@ -30,8 +31,9 @@ Usage
 a.Constructor
 	you can choose to run infinitely or not.
 	$infi: your decision. the default is true.
+	$logname: It's shark's log name that can help you to memorize the permanent link of the plurk. The default is 'sharklog'
 	
-		new shark($infi)
+		new shark($infi,$logname)
 
 b.Login
 	it's default action designed in php-plurk-api. You have to pass 3 parameters as follows:
@@ -53,7 +55,13 @@ d.Responses
 
 		$this->set_responses($responses);
 
-e.Run
+e.Save
+	You can choose to save the shark's log or not.
+	$choice: true or false. The default is true
+
+		$this->set_save($choice);
+
+f.Run
 	Run the program
 		
 		$this->run();

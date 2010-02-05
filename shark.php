@@ -1,12 +1,13 @@
 <?php
-
 	class shark extends plurk_api
 	{
 		private $_qualifier;
 		private $_token;
 		private $_infinite;
 		private $_responses = array();
+		private $_constants = array();
 		private $_plurks;
+		private $_save;
 
 		/**
 		* userinfo
@@ -27,9 +28,15 @@
 		*/
 		private $_userinfo;
 
-		function __construct($infi = true)
+		function __construct($infi=true,$logname='sharklog')
 		{
 			$this->_infinite = $infi;
+			$this->_constants['sharklog'] = BASE_PATH . $logname;
+		}
+
+		public function set_save($save=true)
+		{
+			$this->_save = $save;
 		}
 
 		public function set_responses($input)
@@ -51,6 +58,21 @@
 			$this->_userinfo = (array)$profile;
 		}
 
+		private function save($message = '')
+		{
+			if($this->_save)
+			{
+				$log = $this->_constants['sharklog'];
+				if(!file_exists($log))
+				{
+					touch($log);
+				}
+				$source = file_get_contents($log);
+				$source .= date("Y-m-d H:i:s - ").$message."\n";
+				file_put_contents($log,$source);
+			}
+		}
+
 		public function run()
 		{
 			do
@@ -65,7 +87,7 @@
 					//If someone thinks
 					if($p_value->qualifier == $this->_qualifier)
 					{
-						//about 食我
+						//about "token"
 						if(mb_ereg($this->_token,$p_value->content_raw))
 						{
 							$responded = false;
@@ -91,6 +113,8 @@
 								foreach($this->_responses as $values)
 								{
 									$this->add_response($p_value->plurk_id,$values, 'says');
+									//Save the permalink at the sharklog
+									$this->save($this->get_permalink($p_value->plurk_id));
 								}
 							}
 						}
