@@ -46,7 +46,8 @@ b.Login
 c.Rules
 	You can choose which word to match as your token
 	$token: Your specific matching word (or **regular expression** here)
-					Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
+
+	Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
 
 		$this->set_rules($token);
 
@@ -63,6 +64,7 @@ d.Responses
 e.Save
 	You can choose to save the shark's log or not. BTW, two records are saved as "sharlog" for each plurk. 
 	One is "posted time" and the other is "permanent link". And all of them are wrapped in JSON format at the same time.
+
 	$choice: true or false. The default is true
 
 		$this->set_save($choice);
