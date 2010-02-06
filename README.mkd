@@ -74,7 +74,7 @@ f.Run
 		$this->run();
 
 g.others
-	In order to extend the flexibility of shark, I inherits the class from php-plurk-api. 
+	In order to extend the flexibility of shark, I inherit the class from php-plurk-api. 
 	This means that you can use any method from the class as you wish! Here comes some useful methods from the class:
 
 		$this->add_plurk();
