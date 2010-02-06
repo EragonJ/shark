@@ -72,7 +72,18 @@ f.Run
 	Run the program
 		
 		$this->run();
-		
+
+g.others
+	In order to extend the flexibility of shark, I inherits the class from php-plurk-api. 
+	This means that you can use any method from the class as you wish! Here comes some useful methods from the class:
+
+		$this->add_plurk();
+		$this->add_response();
+		$this->add_all_as_friends();
+		...
+
+	If you want to know more methods about this, just go to the official site of php-plurk-api to check it !
+
 Recommend
 =========
 This program is advised to run on Command Line Interface(CLI).
