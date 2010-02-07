@@ -56,9 +56,30 @@ c.Rules
 
 d.Responses
 	You can decide what the responses will be.
-	$response: Your response
+	If you use a relative path for a JSON-type list for response, you can just put the link here!
+	Shark will automatically check whether the file exists or not  then do the proper action.
+	$response: Your response or a file
 
 		$this->set_responses($responses);
+
+	Example:
+		
+		$this->set_responses("Hello! Im a shark!");
+
+		or
+
+		$this->set_responses("responses.txt");
+
+	The most important thing I have to remind is that you have to use the JSON type for storing the file like this:
+
+	
+	{"Hi, ":"this ","is ":"shark."}
+
+	Shark will automatically turn the key and value into your response in Plurk like this:
+
+	>> Hi, this is shark.
+
+	It is easy , isn't it !?
 
 e.Save
 	You can choose to save the shark's log or not. BTW, two records are saved as "sharlog" for each plurk. 
