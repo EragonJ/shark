@@ -9,7 +9,7 @@ Installation
 You have to download php-plurk-api from [Here](http://code.google.com/p/php-plurk-api/) and then require **plurk_api.php**
 and **shark.php** together in **your_bot.php**. After some configurations set , then it's time to use it !
 
-Here comes the demo of installation flow:
+Here comes the demo of installation (your_bot.php) flow:
 
 		require('plurk_api.php');
 		require('shark.php');
@@ -19,7 +19,7 @@ Here comes the demo of installation flow:
 		$password = 'test';
 
 		$plurk = new shark();
-		$plurk->login($api_key,$username,$password);
+		$plurk->login($apikey,$username,$password);
 		$plurk->set_rules('smile|laugh'); 
 		$plurk->set_responses('I detect "token" and leave the response by your_bot');
 		$plurk->set_save(true);
