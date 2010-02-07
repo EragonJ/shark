@@ -9,7 +9,7 @@
 	$plurk = new shark();
 	$plurk->login($apikey,$username,$password);
 	$plurk->set_rules('smile|laugh'); 
-	$plurk->set_responses('I detect "token" and leave the response by your_bot');
+	$plurk->set_responses('I detect "token" and leave the response by Shark');
 	$plurk->set_save(true);
 	$plurk->run();
 ?>
