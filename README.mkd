@@ -31,7 +31,7 @@ Usage
 a.Constructor
 	you can choose to run infinitely or not.
 	(Optional) $infi: your decision. the default is true.
-	(Optional) $logname: It's shark's log name that can help you to memorize the permanent link of the plurk. The default is 'sharklog'
+	(Optional) $logname: It's shark's log name that can memorize the permanent link of the plurk. The default is 'sharklog'
 	
 		new shark($infi,$logname)
 
