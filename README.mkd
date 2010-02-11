@@ -30,8 +30,8 @@ Usage
 
 a.Constructor
 	you can choose to run infinitely or not.
-	$infi: your decision. the default is true.
-	$logname: It's shark's log name that can help you to memorize the permanent link of the plurk. The default is 'sharklog'
+	(Optional) $infi: your decision. the default is true.
+	(Optional) $logname: It's shark's log name that can help you to memorize the permanent link of the plurk. The default is 'sharklog'
 	
 		new shark($infi,$logname)
 
@@ -47,28 +47,30 @@ c.Rules
 	You can choose which word to match as your token
 	Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
 	$token: Your specific matching word (or "regular expression" here)
+	(Optional) $qualifier: When people use the matched qualifer , then the bot will continue to respond.
 
-		$this->set_rules($token);
+		$this->set_rules($token,$qualifier);
 
 	example:
 		
-		$this->set_rules("測試|[Tt]est");
+		$this->set_rules("測試|[Tt]est","thinks");
 
 d.Responses
 	You can decide what the responses will be.
 	If you use a relative path for a JSON-type list for response, you can just put the link here!
 	Shark will automatically check whether the file exists or not  then do the proper action.
 	$response: Your response or a file
+	(Optional) $qualifier: It is the qualifier that will be used when you respond.
 
-		$this->set_responses($responses);
+		$this->set_responses($responses,$qualifier);
 
 	Example:
 		
-		$this->set_responses("Hello! Im a shark!");
+		$this->set_responses("Hello! Im a shark!","thinks");
 
 		or
 
-		$this->set_responses("responses.txt");
+		$this->set_responses("responses.txt","thinks");
 
 	The most important thing I have to remind is that you have to use the JSON type for storing the file like this:
 	

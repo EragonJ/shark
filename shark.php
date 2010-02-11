@@ -11,7 +11,10 @@
 		private $_filelist;
 		private $_filelistnum;
 		private $_randnum;
+		private $_responseQualifier;
 
+		private $id;
+		private $timezone;
 		/**
 		* userinfo
 		* @display_name 
@@ -24,12 +27,11 @@
 		* @avatar
 		* @full_name
 		* @gender
-		* @timezone
+		* @timezone    => php_plurk_api doesnt support
 		* @recruited
-		* @id
+		* @id          => php_plurk_api doesnt support
 		* @karma
 		*/
-		private $_userinfo;
 
 		function __construct($infi=true,$logname='sharklog')
 		{
@@ -42,7 +44,7 @@
 			$this->_save = $save;
 		}
 
-		public function set_responses($input)
+		public function set_responses($input,$qualifier='says')
 		{
 			//To test whether it is a file or not (only support json)
 			if(file_exists($input))
@@ -57,6 +59,7 @@
 				is_array($input) ? $input
 												 : array_push($this->_responses, $input);
 			}
+			$this->_responseQualifier = $qualifier;
 		}
 
 		public function set_rules($token,$qualifier='thinks')
@@ -69,7 +72,11 @@
 		private function set_profile()
 		{
 			$profile = $this->get_own_profile()->user_info;
-			$this->_userinfo = (array)$profile;
+			$userinfo = (array)$profile;
+			foreach($userinfo as $key => $value)
+			{
+				$this->$key = $value;
+			}
 		}
 
 		private function save($message = '')
@@ -127,7 +134,7 @@
 							{
 								foreach( $responser_list as $responser)
 								{	
-									if($responser->uid == $this->_userinfo['uid'])
+									if($responser->uid == $this->uid)
 									{
 										$responded = true;
 										break;
@@ -140,7 +147,7 @@
 							{
 								foreach($this->_responses as $values)
 								{
-									$this->add_response($p_value->plurk_id,$values, 'says');
+									$this->add_response($p_value->plurk_id,$values,$this->_responseQualifier);
 									//Save the permalink at the sharklog
 									$this->save($this->get_permalink($p_value->plurk_id));
 								}
