@@ -1,7 +1,7 @@
 <?php
 	class shark extends plurk_api
 	{
-		private $_qualifier;
+		private $_rulesQualifier;
 		private $_token;
 		private $_infinite;
 		private $_responses = array();
@@ -12,6 +12,7 @@
 		private $_filelistnum;
 		private $_randnum;
 		private $_responseQualifier;
+		private $_wordEncoding;
 
 		private $id;
 		private $timezone;
@@ -37,6 +38,7 @@
 		{
 			$this->_infinite = $infi;
 			$this->_constants['sharklog'] = BASE_PATH . $logname;
+			$this->_wordEncoding = "utf-8";
 		}
 
 		public function set_save($save=true)
@@ -64,7 +66,7 @@
 
 		public function set_rules($token,$qualifier='thinks')
 		{
-			$this->_qualifier = $qualifier;
+			$this->_rulesQualifier = $qualifier;
 			$this->_token     = $token;
 			$this->set_profile();
 		}
@@ -105,6 +107,13 @@
 			{
 				$output .= $key.$val;
 			}
+
+			//To prevent the limitation of 140 words
+			if(mb_strlen($output,$this->_wordEncoding)>=140)
+			{
+				$output = mb_substr($output,0,135,$this->_wordEncoding)."...";
+			}
+
 			array_push($this->_responses,$output);
 		}
 
@@ -120,7 +129,7 @@
 				foreach( $this->_plurks as $p_value )
 				{
 					//If someone thinks
-					if($p_value->qualifier == $this->_qualifier)
+					if($p_value->qualifier == $this->_rulesQualifier)
 					{
 						//about "token"
 						if(mb_ereg($this->_token,$p_value->content_raw))
