@@ -13,6 +13,7 @@
 		private $_randnum;
 		private $_responseQualifier;
 		private $_wordEncoding;
+        private $_timeLimitations;
 
 		private $id;
 		private $timezone;
@@ -38,7 +39,8 @@
 		{
 			$this->_infinite = $infi;
 			$this->_constants['sharklog'] = BASE_PATH . $logname;
-			$this->_wordEncoding = "utf-8";
+			$this->_wordEncoding = "UTF-8";
+            $this->_timeLimitations = 1;
 		}
 
 		public function set_save($save=true)
@@ -70,6 +72,16 @@
 			$this->_token     = $token;
 			$this->set_profile();
 		}
+
+        public function set_time_limitations($limit)
+        {
+            $this->_timeLimitations = $limit;
+        }
+
+        private function check_time()
+        {
+            sleep($this->_timeLimitations);
+        }
 
 		private function set_profile()
 		{
@@ -111,7 +123,7 @@
 			//To prevent the limitation of 140 words
 			if(mb_strlen($output,$this->_wordEncoding)>=140)
 			{
-				$output = mb_substr($output,0,135,$this->_wordEncoding)."...";
+				$output = mb_substr($output,0,130,$this->_wordEncoding)."...";
 			}
 
 			array_push($this->_responses,$output);
@@ -121,6 +133,7 @@
 		{
 			do
 			{
+
 				$this->_plurks = $this->get_plurks(null,20,null,null,null);	
 
 				//change stdClass to Array
@@ -170,6 +183,10 @@
 						}
 					}
 				}
+
+                //Do the time limitations to decrease the API calls
+                $this->check_time();
+
 			}while($this->_infinite);
 		}
 	}

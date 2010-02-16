@@ -22,6 +22,7 @@ Here comes the demo of installation (your_bot.php) flow:
 		$plurk->login($apikey,$username,$password);
 		$plurk->set_rules('smile|laugh'); 
 		$plurk->set_responses('I detect "token" and leave the response by Shark');
+        $plurk->set_time_limitations(0);
 		$plurk->set_save(true);
 		$plurk->run();
 
@@ -90,12 +91,19 @@ e.Save
 
 		$this->set_save($choice);
 
-f.Run
+f.Time
+    You can set the time limitations to decrease the API calls so that you will not run over the 50000 calls per day.
+    BTW, it's optional method. The default time limitation is 1 second.
+    $limit: It's your time limitations . The unit is "Second"
+
+        $this->set_time_limitations($limit);
+
+g.Run
 	Run the program
 		
 		$this->run();
 
-g.others
+h.Others
 	In order to extend the flexibility of shark, I inherit the class from php-plurk-api. 
 	This means that you can use any method from the class as you wish! Here comes some useful methods from the class:
 
