@@ -45,13 +45,13 @@
 
 		public function set_save($save=true)
 		{
-			$this->_save = $save;
+ 			$this->_save = $save;
 		}
 
 		public function set_responses($input,$qualifier='says')
 		{
 			//To test whether it is a file or not (only support json)
-			if(file_exists($input))
+			if(file_exists($input)||preg_match("/http/",$input))
 			{
 				$content            = file_get_contents($input);
 				$this->_filelist    = explode("\n",$content);
@@ -60,8 +60,7 @@
 			}
 			else
 			{
-				is_array($input) ? $input
-												 : array_push($this->_responses, $input);
+				is_array($input) ? $input : array_push($this->_responses, $input);
 			}
 			$this->_responseQualifier = $qualifier;
 		}
