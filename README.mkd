@@ -58,7 +58,7 @@ c.Rules
 
 d.Responses
 	You can decide what the responses will be.
-	If you use a relative path for a JSON-type list for response, you can just put the link here!
+	If you use a relative path for a JSON-type list for response (separated by '\n'), you can just put the link here!
 	Shark will automatically check whether the file exists or not  then do the proper action.
 	$response: Your response or a file
 	(Optional) $qualifier: It is the qualifier that will be used when you respond.
@@ -72,6 +72,10 @@ d.Responses
 		or
 
 		$this->set_responses("responses.txt","thinks");
+
+        or
+
+        $this->set_responses("http://test/json_output/","thinks");
 
 	The most important thing I have to remind is that you have to use the JSON type for storing the file like this:
 	
