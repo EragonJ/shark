@@ -37,6 +37,9 @@
 
 		function __construct($infi=true,$logname='sharklog')
 		{
+			//configuration for php.ini
+			ini_set("max_execution_time",0);
+
 			$this->_infinite = $infi;
 			$this->_constants['sharklog'] = BASE_PATH . $logname;
 			$this->_wordEncoding = "UTF-8";
@@ -74,12 +77,12 @@
 
 		public function set_time_limitations($limit)
 		{
-				$this->_timeLimitations = $limit;
+			$this->_timeLimitations = $limit;
 		}
 
 		private function check_time()
 		{
-				sleep($this->_timeLimitations);
+			sleep($this->_timeLimitations);
 		}
 
 		private function set_profile()
