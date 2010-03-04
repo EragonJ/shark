@@ -13,7 +13,7 @@
 		private $_randnum;
 		private $_responseQualifier;
 		private $_wordEncoding;
-        private $_timeLimitations;
+		private $_timeLimitations;
 
 		private $id;
 		private $timezone;
@@ -40,7 +40,7 @@
 			$this->_infinite = $infi;
 			$this->_constants['sharklog'] = BASE_PATH . $logname;
 			$this->_wordEncoding = "UTF-8";
-            $this->_timeLimitations = 1;
+			$this->_timeLimitations = 1;
 		}
 
 		public function set_save($save=true)
@@ -72,15 +72,15 @@
 			$this->set_profile();
 		}
 
-        public function set_time_limitations($limit)
-        {
-            $this->_timeLimitations = $limit;
-        }
+		public function set_time_limitations($limit)
+		{
+				$this->_timeLimitations = $limit;
+		}
 
-        private function check_time()
-        {
-            sleep($this->_timeLimitations);
-        }
+		private function check_time()
+		{
+				sleep($this->_timeLimitations);
+		}
 
 		private function set_profile()
 		{
@@ -183,8 +183,8 @@
 					}
 				}
 
-                //Do the time limitations to decrease the API calls
-                $this->check_time();
+				//Do the time limitations to decrease the API calls
+				$this->check_time();
 
 			}while($this->_infinite);
 		}
