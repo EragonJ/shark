@@ -3,31 +3,50 @@ Introduction
 
 It's an integrated class that you can design you plurk bot easily with **shark**. I'm still working on it and try to make it more user-friendly. In this way, you can happily design your own bot to keep watch any plurk posted by your friends and make a instant response to it!
 
-Installation
-============
+Installation(UPDATED)
+=====================
 
 You have to download php-plurk-api from [Here](http://code.google.com/p/php-plurk-api/) and then require **plurk_api.php**
-and **shark.php** together in **your_bot.php**. After some configurations set , then it's time to use it !
+and **shark.php** **shark.core.php** together in **your_bot.php**. After some configurations set , it's time to swim with it !
 
 Here comes the demo of installation (your_bot.php) flow:
 
 		require('plurk_api.php');
 		require('shark.php');
+		require('shark.core.php');
 
 		$apikey = 'xxx';
 		$username = 'test';
 		$password = 'test';
 
+		/*Shark Instance 1*/
 		$plurk = new shark();
 		$plurk->login($apikey,$username,$password);
 		$plurk->set_rules('smile|laugh'); 
 		$plurk->set_responses('I detect "token" and leave the response by Shark');
-        $plurk->set_time_limitations(0);
+		$plurk->set_time_limitations(1);
+		$plurk->set_response_random(true);
 		$plurk->set_save(true);
-		$plurk->run();
+		$plurk->set_mode(1);
 
-Usage
-=====
+		/*Shark Instance 2*/
+		$plurk = new shark();
+		$plurk->login($apikey,$username,$password);
+		$plurk->set_rules('smile|laugh'); 
+		$plurk->set_responses('Im shark, I can automatically plurk on 2010-03-06 at 14:01:10');
+		$plurk->set_time_limitations(1);
+		$plurk->set_response_random(true);
+		$plurk->set_save(true);
+		$plurk->set_mode(2,array("2010-03-06 14:01:10"));
+		
+		$sharkCore = new sharkCore();
+		$sharkCore -> add($plurk);
+		$sharkCore -> add($plurk2);
+		$sharkCore -> run();
+
+
+Usage(NOT UPDATED YET!!!)
+=========================
 
 a.Constructor
 	you can choose to run infinitely or not.
@@ -73,9 +92,9 @@ d.Responses
 
 		$this->set_responses("responses.txt","thinks");
 
-        or
+		or
 
-        $this->set_responses("http://test/json_output/","thinks");
+		$this->set_responses("http://test/json_output/","thinks");
 
 	The most important thing I have to remind is that you have to use the JSON type for storing the file like this:
 	
