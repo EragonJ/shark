@@ -4,7 +4,7 @@
 	 * Dependencies 
 	 */
 	require('plurk_api.php');
-	require('shark.copy.php');
+	require('shark.php');
 
 	class sharkCore
 	{
@@ -27,13 +27,14 @@
 		 */
 		private $_sharkInstance = array();
 
-		function __construct($infi=true,$logname='sharklog')
+		function __construct($infi=true,$timezone='Asia/Taipei',$logname='sharklog')
 		{
 			/**
 			 * php.ini configurations
 			 */
 			ini_set("max_execution_time",0);
-			
+			date_default_timezone_set($timezone);
+
 			$this->_infinite = $infi;
 			$this->_timeLimitations = 1;
 		}
@@ -65,35 +66,5 @@
 			}while($this->_infinite);
 		}
 	}
-
-	/*Configuration part*/
-	$api_key[0] = 'GF0uZu5N4058aWw7a4rRx0z6aLYW7xFQ';
-	$api_key[1] = 'JPhLvMLJVaE0XVvFQcG90haHfYwfEL84';
-	$username = 'hax4_bot';
-	$password = 'hahahaha';
-	
-	/*Shark Instance 1*/
-	$plurk = new shark(1);
-	$plurk->login($api_key[1], $username, $password);
-	$plurk->set_rules('測試');
-	$plurk->set_responses("responses","thinks");
-	$plurk->set_time_limitations(1);
-	$plurk->set_save(true);
-
-	/*Shark Instance 2*/
-	$plurk2 = new shark(1);
-	$plurk2->login($api_key[1], $username, $password);
-	$plurk2->set_rules('囧',"loves");
-	$plurk2->set_responses("responses",":");
-	$plurk2->set_time_limitations(1);
-	$plurk2->set_save(true);
-	
-	/*Main part*/
-	/*
-	$sharkCore = new sharkCore();
-	$sharkCore -> add($plurk);
-	$sharkCore -> add($plurk2);
-	$sharkCore -> run();
-	*/
 
 ?>

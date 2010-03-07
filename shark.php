@@ -12,9 +12,13 @@
 		private $_filelistnum;
 		private $_randnum;
 		private $_responseQualifier;
+
+		private $_responseRandom;
+
 		private $_wordEncoding;
 		private $_timeLimitations;
 		private $_mode;
+		private $_modeParameters = array();
 
 		private $id;
 		private $timezone;
@@ -23,12 +27,12 @@
 		* @id          => php_plurk_api doesnt support
 		*/
 
-		function __construct($mode='1',$logname='sharklog')
+		function __construct($logname='sharklog')
 		{
-			$this->_mode = $mode;
 			$this->_constants['sharklog'] = BASE_PATH . $logname;
 			$this->_wordEncoding = "UTF-8";
 			$this->_timeLimitations = 1;
+			$this->_responseRandom = true;
 		}
 
 		public function set_save($save=true)
@@ -44,6 +48,9 @@
 				$content            = file_get_contents($input);
 				$this->_filelist    = explode("\n",$content);
 				$this->_filelistnum = count($this->_filelist)-1-1;//one space
+
+				unset($this->_filelist[$this->_filelistnum+1]); //unset the blank
+
 				$this->rand_response();
 			}
 			else
@@ -53,11 +60,29 @@
 			$this->_responseQualifier = $qualifier;
 		}
 
+		public function set_response_random($input=true)
+		{
+			$this->_responseRandom = $input;
+		}
+
 		public function set_rules($token,$qualifier='thinks')
 		{
 			$this->_rulesQualifier = $qualifier;
-			$this->_token     = $token;
+			$this->_token          = $token;
 			$this->set_profile();
+		}
+
+		public function set_mode($mode='1',$parameters=array())
+		{
+			$this->_mode = $mode;
+			if(is_array($parameters))
+			{
+				$this->_modeParameters = $parameters;
+			}
+			else
+			{
+				array_push($this->_modeParameters,$parameters);
+			}
 		}
 
 		public function set_time_limitations($limit)
@@ -65,9 +90,14 @@
 			$this->_timeLimitations = $limit;
 		}
 		
-		/*It is a special method for you*/
+		/*
+		 * It is a special method for you
+		 */
 		protected function mode0(){}
 		
+		/*
+		 * One plurk one response mode
+		 */
 		protected function mode1()
 		{
 
@@ -121,9 +151,32 @@
 			}
 		}
 
+		/*
+		 * Task mode
+		 */
 		protected function mode2()
 		{
 
+			/*
+			 * We have to ensure that the time limitation is 1
+			 * If two sharks live together, there will be a queuing delay to be solved later.
+			 */
+			foreach($this->_modeParameters as $k => $v)
+			{
+				$now  = new DateTime(date("Y-m-d H:i:s"));
+				$task = new DateTime($v);
+
+				$time = $k."] Now:".$now->format("Y-m-d H:i:s")." Target:".$task->format("Y-m-d H:i:s")."\r\n";
+
+				if($now == $task)
+				{
+					$this->add_plurk('tr_ch',$this->_responseQualifier,$this->_responses[$k]);
+				}
+				else if($now < $task)
+				{
+					echo $time;
+				}
+			}
 		}
 
 		private function fetch_plurks()
@@ -166,22 +219,44 @@
 
 		private function rand_response()
 		{
-			$this->_randnum  = rand(0,$this->_filelistnum);
-			$output          = '';
-
-			//It is nested array
-			$result = json_decode($this->_filelist[$this->_randnum],true);
-			foreach($result as $key => $val)
+			if($this->_responseRandom)
 			{
-				$output .= $key.$val;
-			}
+				$this->_randnum  = rand(0,$this->_filelistnum);
+				$output          = '';
 
-			//To prevent the limitation of 140 words
-			if(mb_strlen($output,$this->_wordEncoding)>=140)
-			{
-				$output = mb_substr($output,0,130,$this->_wordEncoding)."...";
+				//It is nested array
+				$result = json_decode($this->_filelist[$this->_randnum],true);
+				foreach($result as $key => $val)
+				{
+					$output .= $key.$val;
+				}
+
+				//To prevent the limitation of 140 words
+				if(mb_strlen($output,$this->_wordEncoding)>=140)
+				{
+					$output = mb_substr($output,0,130,$this->_wordEncoding)."...";
+				}
+				array_push($this->_responses,$output);
 			}
-			array_push($this->_responses,$output);
+			else
+			{
+				foreach($this->_filelist as $k => $v)
+				{
+					$output = '';
+					$result = json_decode($v,true);
+
+					foreach($result as $key => $val)
+					{
+						$output .= $key.$val;
+					}
+					
+					if(mb_strlen($output,$this->_wordEncoding)>=140)
+					{
+						$output = mb_substr($output,0,130,$this->_wordEncoding)."...";
+					}
+					array_push($this->_responses,$output);
+				}
+			}
 		}
 
 		public function run()
