@@ -44,19 +44,38 @@ Here comes the demo of installation (your_bot.php) flow:
 		$sharkCore -> add($plurk2);
 		$sharkCore -> run();
 
-
-Usage(NOT UPDATED YET!!!)
-=========================
+Usage for sharkCore class
+===================
 
 a.Constructor
-	you can choose to run infinitely or not.
-	(Optional) $infi: your decision. the default is true.
-	(Optional) $logname: It's shark's log name that can memorize the permanent link of the plurk. The default is 'sharklog'
 	
-		new shark($infi,$logname)
+	(Optional) $infi: to swim with shark infinitely or not. The defalut is true.
+	(Optional) $timezone: the timezone for shark. The default is 'Asia/Taipei'.
+	(Optional) $logname: It is shark's log name but it's not used now. The default is 'sharklog'
+		new sharkCore($infi,$timezone,$logname)
+
+b.Add
+	Add instances of shark.
+	
+	$sharkInstance: you can specify plenty of shark instances if you want.
+	$this->add(shark $sharkInstance)
+
+c.Run
+	SharkCore will call each run() method in each shark instance.
+
+	$this->run();
+
+Usage for shark class
+=====================
+
+a.Constructor
+	(Optional) $logname: It is shark's log name that can memorize the permanent link of the plurk. The default is 'sharklog'
+	
+		new shark($logname)
 
 b.Login
 	it's default action designed in php-plurk-api. You have to pass 3 parameters as follows:
+
 	$api: Your API key
 	$username: Your username
 	$password: Your password
@@ -64,10 +83,11 @@ b.Login
 		$this->login($api,$username,$password);
 
 c.Rules
-	You can choose which word to match as your token
+	You can choose which word to match.
 	Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
-	$token: Your specific matching word (or "regular expression" here)
-	(Optional) $qualifier: When people use the matched qualifer , then the bot will continue to respond.
+
+	$token: Your specific matching word (or "POSIX Regex" here)
+	(Optional) $qualifier: When match this qualifier, Shark will respond. The default is 'Thinks'.
 
 		$this->set_rules($token,$qualifier);
 
@@ -76,11 +96,14 @@ c.Rules
 		$this->set_rules("測試|[Tt]est","thinks");
 
 d.Responses
+
+	1)
 	You can decide what the responses will be.
-	If you use a relative path for a JSON-type list for response (separated by '\n'), you can just put the link here!
+	If you use a relative path for a JSON-type list for responses (separated by '\n'), you can just put the link here!
 	Shark will automatically check whether the file exists or not  then do the proper action.
-	$response: Your response or a file
-	(Optional) $qualifier: It is the qualifier that will be used when you respond.
+
+	$response: Your response (string or array is fine) or a file or a specific link with prefix "http://"
+	(Optional) $qualifier: It is the qualifier that will be used when you respond. The default is 'says'.
 
 		$this->set_responses($responses,$qualifier);
 
@@ -106,6 +129,12 @@ d.Responses
 
 	It is easy , isn't it !?
 
+	2)
+	You can decide whether random your responses or not.
+	$trueOrFalse: Your decision, true or false.
+
+		$this->set_response_random($trueOrFalse);
+
 e.Save
 	You can choose to save the shark's log or not. BTW, two records are saved as "sharlog" for each plurk. 
 	One is "posted time" and the other is "permanent link". And all of them are wrapped in JSON format at the same time.
@@ -117,16 +146,62 @@ e.Save
 f.Time
     You can set the time limitations to decrease the API calls so that you will not run over the 50000 calls per day.
     BTW, it's optional method. The default time limitation is 1 second.
+
     $limit: It's your time limitations . The unit is "Second"
 
         $this->set_time_limitations($limit);
 
 g.Run
 	Run the program
-		
+	It's recommended to run Shark through SharkCore!!
 		$this->run();
 
-h.Others
+h.Modes (it's increasing)
+	It's a new design for Shark. You can design your own modes or use the written modes by me.
+
+	0) Mode0: "It's a special mode reserved for you if you want to design your style!"
+	You just have to inherit the Shark class then design!!
+
+	1) Mode1: "When matching words appear, you can reponde it once ."
+	You have to set your rules and response files correctly. and then use the sharkCore to run it.
+
+		$shark = new shark();
+		$shark->login($api_key[1], $username, $password);
+		$shark->set_rules('Orz',"loves");
+		$shark->set_responses("responses",":");
+		$shark->set_time_limitations(1);
+		$shark->set_response_random(true);
+		$shark->set_save(true);
+		$shark->set_mode(1);
+
+	2) Mode2: "You can plurk specific content when time's up ."
+	You have to set your content(for convenince, I choose set_responses method here, but dont be confused) and the time.
+	! The most important thing is that you have to set time limitation to "1", otherwise Shark wont count correctly.
+	! Content 1 matches task 1 and content 2 matches task 2 and vice versa. (matching in sequence)
+	! Mode 2 supports two formats of time. One is "HH:mm:ss" while the other one is "YY-MM-DD HH:mm:ss"
+
+		$shark2 = new shark();
+		$shark2->login($api_key[1], $username, $password);
+		$shark2->set_responses(array("Content1","Content2"),"thinks");
+		$shark2->set_time_limitations(1);
+		$shark2->set_response_random(true);
+		$shark2->set_save(true);
+		$shark2->set_mode(2,array("19:33:00","2010-03-08 19:32:50"));
+
+	After)
+	You can put many shark instances in one sharkCore to run together!!
+
+		$sharkCore = new sharkCore();
+		$sharkCore->add($shark);
+		$sharkCore->add($shark2);
+		$sharkCore->run();
+
+	That's it!! Everythin is done ! time to swim with our sharks now!!
+
+	!One thing I have to remind you is not to put mode1 and mode2 together, it will make mode2 count time wrongly.
+	!The reason why this will happen is because mode1 will spend more than 1 sec matching tokens then make mode2 wrong.
+
+i.Others
 	In order to extend the flexibility of shark, I inherit the class from php-plurk-api. 
 	This means that you can use any method from the class as you wish! Here comes some useful methods from the class:
 

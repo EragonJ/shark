@@ -3,8 +3,6 @@
 	/**
 	 * Dependencies 
 	 */
-	require('plurk_api.php');
-	require('shark.php');
 
 	class sharkCore
 	{

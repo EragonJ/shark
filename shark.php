@@ -43,19 +43,20 @@
 		public function set_responses($input,$qualifier='says')
 		{
 			//To test whether it is a file or not (only support json)
-			if(file_exists($input)||preg_match("/http/",$input))
+			if(file_exists($input)||(!is_array($input) && preg_match("/http:\/\//",$input)))
 			{
 				$content            = file_get_contents($input);
 				$this->_filelist    = explode("\n",$content);
 				$this->_filelistnum = count($this->_filelist)-1-1;//one space
 
-				unset($this->_filelist[$this->_filelistnum+1]); //unset the blank
+				unset($this->_filelist[$this->_filelistnum+1]); //unset the blank , important
 
 				$this->rand_response();
 			}
 			else
 			{
-				is_array($input) ? $input : array_push($this->_responses, $input);
+				is_array($input) ? ($this->_responses = $input) 
+												 : (array_push($this->_responses, $input));
 			}
 			$this->_responseQualifier = $qualifier;
 		}
@@ -161,12 +162,26 @@
 			 * We have to ensure that the time limitation is 1
 			 * If two sharks live together, there will be a queuing delay to be solved later.
 			 */
+			$pattern1 = "/\d{2}:\d{2}:\d{2}/";
+			$pattern2 = "/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/";
+
 			foreach($this->_modeParameters as $k => $v)
 			{
-				$now  = new DateTime(date("Y-m-d H:i:s"));
+
+				if(preg_match($pattern1,$v))
+				{
+					$format = "H:i:s";
+				}
+				
+				if(preg_match($pattern2,$v))
+				{
+					$format = "Y-m-d H:i:s";
+				}
+
+				$now  = new DateTime(date($format));
 				$task = new DateTime($v);
 
-				$time = $k."] Now:".$now->format("Y-m-d H:i:s")." Target:".$task->format("Y-m-d H:i:s")."\r\n";
+				$time = $k."] Now:".$now->format($format)." Target:".$task->format($format)."\r\n";
 
 				if($now == $task)
 				{
