@@ -45,9 +45,10 @@ Here comes the demo of installation (your_bot.php) flow:
 		$sharkCore -> run();
 
 Usage for sharkCore class
-===================
+=========================
 
 a.Constructor
+-------------
 	
 	(Optional) $infi: to swim with shark infinitely or not. The defalut is true.
 	(Optional) $timezone: the timezone for shark. The default is 'Asia/Taipei'.
@@ -55,12 +56,14 @@ a.Constructor
 		new sharkCore($infi,$timezone,$logname)
 
 b.Add
+-----
 	Add instances of shark.
 	
 	$sharkInstance: you can specify plenty of shark instances if you want.
 	$this->add(shark $sharkInstance)
 
 c.Run
+-----
 	SharkCore will call each run() method in each shark instance.
 
 	$this->run();
@@ -69,11 +72,13 @@ Usage for shark class
 =====================
 
 a.Constructor
+-------------
 	(Optional) $logname: It is shark's log name that can memorize the permanent link of the plurk. The default is 'sharklog'
 	
 		new shark($logname)
 
 b.Login
+-------
 	it's default action designed in php-plurk-api. You have to pass 3 parameters as follows:
 
 	$api: Your API key
@@ -83,6 +88,7 @@ b.Login
 		$this->login($api,$username,$password);
 
 c.Rules
+-------
 	You can choose which word to match.
 	Because I use mb_ereg here(to support multi-byte words),you can use any regular expression which is POSIX extended.
 
@@ -96,6 +102,7 @@ c.Rules
 		$this->set_rules("測試|[Tt]est","thinks");
 
 d.Responses
+-----------
 
 	1)
 	You can decide what the responses will be.
@@ -136,6 +143,7 @@ d.Responses
 		$this->set_response_random($trueOrFalse);
 
 e.Save
+------
 	You can choose to save the shark's log or not. BTW, two records are saved as "sharlog" for each plurk. 
 	One is "posted time" and the other is "permanent link". And all of them are wrapped in JSON format at the same time.
 
@@ -144,6 +152,7 @@ e.Save
 		$this->set_save($choice);
 
 f.Time
+------
     You can set the time limitations to decrease the API calls so that you will not run over the 50000 calls per day.
     BTW, it's optional method. The default time limitation is 1 second.
 
@@ -152,11 +161,13 @@ f.Time
         $this->set_time_limitations($limit);
 
 g.Run
+-----
 	Run the program
 	It's recommended to run Shark through SharkCore!!
 		$this->run();
 
 h.Modes (it's increasing)
+-------------------------
 	It's a new design for Shark. You can design your own modes or use the written modes by me.
 
 	0) Mode0: "It's a special mode reserved for you if you want to design your style!"
@@ -202,6 +213,7 @@ h.Modes (it's increasing)
 	!The reason why this will happen is because mode1 will spend more than 1 sec matching tokens then make mode2 wrong.
 
 i.Others
+--------
 	In order to extend the flexibility of shark, I inherit the class from php-plurk-api. 
 	This means that you can use any method from the class as you wish! Here comes some useful methods from the class:
 
