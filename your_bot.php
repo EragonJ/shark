@@ -27,7 +27,7 @@
 	$plurk2->set_save(true);
 	$plurk2->set_mode(2,array("2010-03-06 14:01:10"));
 
-	$sharkCore = new sharkCore();
+	$sharkCore = new SharkCore();
 	$sharkCore -> add($plurk);
 	$sharkCore -> add($plurk2);
 	$sharkCore -> run();
