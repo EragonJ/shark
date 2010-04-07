@@ -4,7 +4,7 @@
 	 * Dependencies 
 	 */
 
-	class sharkCore
+	class SharkCore
 	{
 
 		/**
